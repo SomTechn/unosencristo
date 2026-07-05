@@ -140,7 +140,7 @@
 
 <script>
   // ⚠️ CONFIGURACIÓN: pega aquí la URL de tu Google Apps Script Web App
-  var GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxCp4ej3odgfK_1w8-FYGw341Y5SG52O2HnhaXofn5NVJiEqUKITlHL4ZepVDvhGFzv/execs";
+  var GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxCp4ej3odgfK_1w8-FYGw341Y5SG52O2HnhaXofn5NVJiEqUKITlHL4ZepVDvhGFzv/exec";
 
   var form = document.getElementById('formRegistro');
   var fechaInput = document.getElementById('fechaNacimiento');
@@ -203,20 +203,27 @@
     datos.append('consentimiento', consentimientoInput.checked ? 'Sí' : 'N/A');
 
     try {
-      await fetch(GOOGLE_SCRIPT_URL, {
+      var resp = await fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',
-        mode: 'no-cors',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: datos.toString()
       });
-      // En modo 'no-cors' no podemos leer la respuesta, así que asumimos éxito
-      // si el fetch no lanzó un error de red.
+
+      if (!resp.ok) {
+        throw new Error('El servidor respondió con estado ' + resp.status + '. Verifica que la URL de Apps Script sea correcta y termine en /exec, y que el despliegue tenga acceso "Cualquier usuario".');
+      }
+
+      var resultado = await resp.json().catch(function() { return null; });
+      if (resultado && resultado.result !== 'success') {
+        throw new Error(resultado.error || 'La hoja de cálculo no confirmó el registro.');
+      }
+
       form.reset();
       edadTexto.textContent = '';
       bloqueConsentimiento.classList.add('hidden');
       mensaje.innerHTML = '<span class="text-emerald-600 font-medium">¡Registro exitoso! Nos pondremos en contacto contigo pronto.</span>';
     } catch (err) {
-      mensaje.innerHTML = '<span class="text-red-600">Hubo un problema de conexión. Intenta de nuevo.</span>';
+      mensaje.innerHTML = '<span class="text-red-600">' + (err.message || 'Hubo un problema de conexión. Intenta de nuevo.') + '</span>';
     } finally {
       btnEnviar.disabled = false;
       btnEnviar.textContent = 'Enviar registro';
