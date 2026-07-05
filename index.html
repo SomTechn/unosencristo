@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#4C1D95">
+<title>Unos en Cristo · Registro de Jóvenes</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          ink:   '#221933',
+          dusk:  '#4C1D95',
+          ember: '#F59E0B',
+          coral: '#FB7185',
+          paper: '#FBFAF7'
+        },
+        fontFamily: {
+          display: ['"Space Grotesk"', 'sans-serif'],
+          body: ['"Inter"', 'sans-serif']
+        }
+      }
+    }
+  }
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  body { font-family: 'Inter', sans-serif; }
+  .font-display { font-family: 'Space Grotesk', sans-serif; }
+  input[type="text"], input[type="date"], input[type="tel"], select, textarea {
+    font-size: 16px; /* evita zoom automático en iOS */
+  }
+  .strand {
+    background: linear-gradient(90deg, #4C1D95, #F59E0B, #FB7185, #4C1D95);
+    background-size: 300% 100%;
+    animation: weave 8s linear infinite;
+  }
+  @keyframes weave {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 100% 50%; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .strand { animation: none; }
+  }
+</style>
+</head>
+<body class="bg-paper text-ink min-h-screen pb-10">
+
+<div class="strand h-1.5 w-full"></div>
+
+<header class="px-5 pt-8 pb-6 text-center">
+  <p class="text-xs tracking-[0.25em] uppercase text-dusk/70 font-semibold mb-2">Una sola generación, muchas iglesias</p>
+  <h1 class="font-display text-3xl sm:text-4xl font-bold text-ink leading-tight">Unos en Cristo</h1>
+  <p class="text-slate-500 text-sm mt-2 max-w-sm mx-auto">Regístrate para unirte a los jóvenes de todas las iglesias del sector.</p>
+</header>
+
+<main class="px-4">
+  <form id="formRegistro" class="max-w-md mx-auto bg-white rounded-2xl shadow-xl border border-slate-200 p-6 sm:p-8 space-y-6">
+
+    <!-- Sección: Quién eres -->
+    <div class="space-y-4">
+      <h2 class="font-display font-semibold text-dusk text-sm uppercase tracking-wide">Quién eres</h2>
+
+      <div>
+        <label class="block text-sm font-medium text-slate-700 mb-1.5">Nombre completo</label>
+        <input type="text" id="nombre" required autocomplete="name"
+          class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-dusk focus:border-transparent outline-none">
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-slate-700 mb-1.5">Iglesia a la que perteneces</label>
+        <input type="text" id="iglesia" required placeholder="Ej: Iglesia ADULAM"
+          class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-dusk focus:border-transparent outline-none">
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-slate-700 mb-1.5">Fecha de nacimiento</label>
+        <input type="date" id="fechaNacimiento" required
+          class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-dusk focus:border-transparent outline-none">
+        <p id="edadTexto" class="text-xs text-slate-400 mt-1"></p>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-slate-700 mb-1.5">¿A qué te dedicas?</label>
+        <select id="ocupacion" required
+          class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-dusk focus:border-transparent outline-none bg-white">
+          <option value="" disabled selected>Selecciona una opción</option>
+          <option value="Estudia">Estudia</option>
+          <option value="Trabaja">Trabaja</option>
+          <option value="Estudia y trabaja">Estudia y trabaja</option>
+          <option value="Otro">Otro</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-slate-700 mb-1.5">Teléfono / WhatsApp</label>
+        <input type="tel" id="telefono" required placeholder="9999-9999" autocomplete="tel"
+          class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-dusk focus:border-transparent outline-none">
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-slate-700 mb-1.5">Sector donde vives</label>
+        <input type="text" id="sector" required placeholder="Ej: Col. López Arellano, sector 3"
+          class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-dusk focus:border-transparent outline-none">
+      </div>
+    </div>
+
+    <!-- Sección: Tu semana -->
+    <div class="space-y-4 pt-2 border-t border-slate-100">
+      <h2 class="font-display font-semibold text-dusk text-sm uppercase tracking-wide pt-4">Tu semana</h2>
+      <div>
+        <label class="block text-sm font-medium text-slate-700 mb-1.5">¿Qué días y horarios tienes disponibles para actividades?</label>
+        <textarea id="disponibilidad" required rows="3" placeholder="Ej: Sábados en la tarde, domingos todo el día, entre semana solo después de las 6pm"
+          class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-dusk focus:border-transparent outline-none resize-none"></textarea>
+        <p class="text-xs text-slate-400 mt-1">Sé lo más específico posible, esto nos ayuda a organizar las actividades.</p>
+      </div>
+    </div>
+
+    <!-- Consentimiento (solo si es menor de edad) -->
+    <div id="bloqueConsentimiento" class="hidden pt-2 border-t border-slate-100">
+      <label class="flex items-start gap-3 pt-4 cursor-pointer">
+        <input type="checkbox" id="consentimiento" class="mt-1 w-5 h-5 rounded border-slate-300 text-dusk focus:ring-dusk">
+        <span class="text-sm text-slate-600">Cuento con el permiso de mis padres o encargado para participar en las actividades de "Unos en Cristo".</span>
+      </label>
+    </div>
+
+    <button type="submit" id="btnEnviar"
+      class="w-full py-3.5 bg-gradient-to-r from-dusk to-coral text-white font-semibold rounded-xl hover:shadow-lg active:scale-[0.98] transition">
+      Enviar registro
+    </button>
+
+    <div id="mensaje" class="text-sm text-center"></div>
+  </form>
+
+  <p class="text-center text-xs text-slate-400 mt-6">"Para que todos sean uno" — Juan 17:21</p>
+</main>
+
+<script>
+  // ⚠️ CONFIGURACIÓN: pega aquí la URL de tu Google Apps Script Web App
+  var GOOGLE_SCRIPT_URL = "PEGA_AQUI_TU_URL_DE_APPS_SCRIPT";
+
+  var form = document.getElementById('formRegistro');
+  var fechaInput = document.getElementById('fechaNacimiento');
+  var edadTexto = document.getElementById('edadTexto');
+  var bloqueConsentimiento = document.getElementById('bloqueConsentimiento');
+  var consentimientoInput = document.getElementById('consentimiento');
+  var mensaje = document.getElementById('mensaje');
+  var btnEnviar = document.getElementById('btnEnviar');
+  var edadCalculada = null;
+
+  function calcularEdad(fechaStr) {
+    var hoy = new Date();
+    var nacimiento = new Date(fechaStr + 'T00:00:00');
+    var edad = hoy.getFullYear() - nacimiento.getFullYear();
+    var m = hoy.getMonth() - nacimiento.getMonth();
+    if (m < 0 || (m === 0 && hoy.getDate() < nacimiento.getDate())) edad--;
+    return edad;
+  }
+
+  fechaInput.addEventListener('change', function() {
+    if (!fechaInput.value) { edadTexto.textContent = ''; bloqueConsentimiento.classList.add('hidden'); return; }
+    edadCalculada = calcularEdad(fechaInput.value);
+    edadTexto.textContent = 'Edad: ' + edadCalculada + ' años';
+    if (edadCalculada < 18) {
+      bloqueConsentimiento.classList.remove('hidden');
+      consentimientoInput.required = true;
+    } else {
+      bloqueConsentimiento.classList.add('hidden');
+      consentimientoInput.required = false;
+      consentimientoInput.checked = false;
+    }
+  });
+
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    if (GOOGLE_SCRIPT_URL.indexOf('PEGA_AQUI') !== -1) {
+      mensaje.innerHTML = '<span class="text-red-600">Falta configurar la URL de Google Apps Script en el archivo.</span>';
+      return;
+    }
+
+    if (edadCalculada !== null && edadCalculada < 18 && !consentimientoInput.checked) {
+      mensaje.innerHTML = '<span class="text-red-600">Debes confirmar el permiso de tus padres o encargado.</span>';
+      return;
+    }
+
+    btnEnviar.disabled = true;
+    btnEnviar.textContent = 'Enviando...';
+    mensaje.innerHTML = '';
+
+    var datos = new URLSearchParams();
+    datos.append('nombre', document.getElementById('nombre').value);
+    datos.append('iglesia', document.getElementById('iglesia').value);
+    datos.append('fechaNacimiento', fechaInput.value);
+    datos.append('edad', edadCalculada !== null ? edadCalculada : '');
+    datos.append('ocupacion', document.getElementById('ocupacion').value);
+    datos.append('telefono', document.getElementById('telefono').value);
+    datos.append('sector', document.getElementById('sector').value);
+    datos.append('disponibilidad', document.getElementById('disponibilidad').value);
+    datos.append('consentimiento', consentimientoInput.checked ? 'Sí' : 'N/A');
+
+    try {
+      await fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: datos.toString()
+      });
+      // En modo 'no-cors' no podemos leer la respuesta, así que asumimos éxito
+      // si el fetch no lanzó un error de red.
+      form.reset();
+      edadTexto.textContent = '';
+      bloqueConsentimiento.classList.add('hidden');
+      mensaje.innerHTML = '<span class="text-emerald-600 font-medium">¡Registro exitoso! Nos pondremos en contacto contigo pronto.</span>';
+    } catch (err) {
+      mensaje.innerHTML = '<span class="text-red-600">Hubo un problema de conexión. Intenta de nuevo.</span>';
+    } finally {
+      btnEnviar.disabled = false;
+      btnEnviar.textContent = 'Enviar registro';
+    }
+  });
+</script>
+</body>
+</html>
