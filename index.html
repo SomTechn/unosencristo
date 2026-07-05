@@ -58,7 +58,7 @@
 </header>
 
 <main class="px-4">
-  <form id="formRegistro" class="max-w-md mx-auto bg-white rounded-2xl shadow-xl border border-slate-200 p-6 sm:p-8 space-y-6">
+  <form id="formRegistro" method="POST" target="hidden_iframe" class="max-w-md mx-auto bg-white rounded-2xl shadow-xl border border-slate-200 p-6 sm:p-8 space-y-6">
 
     <!-- Sección: Quién eres -->
     <div class="space-y-4">
@@ -66,26 +66,27 @@
 
       <div>
         <label class="block text-sm font-medium text-slate-700 mb-1.5">Nombre completo</label>
-        <input type="text" id="nombre" required autocomplete="name"
+        <input type="text" id="nombre" name="nombre" required autocomplete="name"
           class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-dusk focus:border-transparent outline-none">
       </div>
 
       <div>
         <label class="block text-sm font-medium text-slate-700 mb-1.5">Iglesia a la que perteneces</label>
-        <input type="text" id="iglesia" required placeholder="Ej: Iglesia ADULAM"
+        <input type="text" id="iglesia" name="iglesia" required placeholder="Ej: Iglesia ADULAM"
           class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-dusk focus:border-transparent outline-none">
       </div>
 
       <div>
         <label class="block text-sm font-medium text-slate-700 mb-1.5">Fecha de nacimiento</label>
-        <input type="date" id="fechaNacimiento" required
+        <input type="date" id="fechaNacimiento" name="fechaNacimiento" required
           class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-dusk focus:border-transparent outline-none">
         <p id="edadTexto" class="text-xs text-slate-400 mt-1"></p>
+        <input type="hidden" id="edad" name="edad" value="">
       </div>
 
       <div>
         <label class="block text-sm font-medium text-slate-700 mb-1.5">¿A qué te dedicas?</label>
-        <select id="ocupacion" required
+        <select id="ocupacion" name="ocupacion" required
           class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-dusk focus:border-transparent outline-none bg-white">
           <option value="" disabled selected>Selecciona una opción</option>
           <option value="Estudia">Estudia</option>
@@ -97,13 +98,13 @@
 
       <div>
         <label class="block text-sm font-medium text-slate-700 mb-1.5">Teléfono / WhatsApp</label>
-        <input type="tel" id="telefono" required placeholder="9999-9999" autocomplete="tel"
+        <input type="tel" id="telefono" name="telefono" required placeholder="9999-9999" autocomplete="tel"
           class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-dusk focus:border-transparent outline-none">
       </div>
 
       <div>
         <label class="block text-sm font-medium text-slate-700 mb-1.5">Sector donde vives</label>
-        <input type="text" id="sector" required placeholder="Ej: Col. López Arellano, sector 3"
+        <input type="text" id="sector" name="sector" required placeholder="Ej: Col. López Arellano, sector 3"
           class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-dusk focus:border-transparent outline-none">
       </div>
     </div>
@@ -113,7 +114,7 @@
       <h2 class="font-display font-semibold text-dusk text-sm uppercase tracking-wide pt-4">Tu semana</h2>
       <div>
         <label class="block text-sm font-medium text-slate-700 mb-1.5">¿Qué días y en qué horarios tienes tiempo libre?</label>
-        <textarea id="disponibilidad" required rows="3" placeholder="Ej: Sábados en la tarde, domingos todo el día, entre semana solo después de las 6pm"
+        <textarea id="disponibilidad" name="disponibilidad" required rows="3" placeholder="Ej: Sábados en la tarde, domingos todo el día, entre semana solo después de las 6pm"
           class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-dusk focus:border-transparent outline-none resize-none"></textarea>
         <p class="text-xs text-slate-400 mt-1">Sé lo más específico posible, esto nos ayuda a organizar las actividades en tu tiempo libre.</p>
       </div>
@@ -122,7 +123,7 @@
     <!-- Consentimiento (solo si es menor de edad) -->
     <div id="bloqueConsentimiento" class="hidden pt-2 border-t border-slate-100">
       <label class="flex items-start gap-3 pt-4 cursor-pointer">
-        <input type="checkbox" id="consentimiento" class="mt-1 w-5 h-5 rounded border-slate-300 text-dusk focus:ring-dusk">
+        <input type="checkbox" id="consentimiento" name="consentimiento" class="mt-1 w-5 h-5 rounded border-slate-300 text-dusk focus:ring-dusk">
         <span class="text-sm text-slate-600">Cuento con el permiso de mis padres o encargado para participar en las actividades de "Unos en Cristo".</span>
       </label>
     </div>
@@ -138,6 +139,8 @@
   <p class="text-center text-xs text-slate-400 mt-6">"Para que todos sean uno" — Juan 17:21</p>
 </main>
 
+<iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
+
 <script>
   // ⚠️ CONFIGURACIÓN: pega aquí la URL de tu Google Apps Script Web App
   var GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxCp4ej3odgfK_1w8-FYGw341Y5SG52O2HnhaXofn5NVJiEqUKITlHL4ZepVDvhGFzv/exec";
@@ -145,11 +148,18 @@
   var form = document.getElementById('formRegistro');
   var fechaInput = document.getElementById('fechaNacimiento');
   var edadTexto = document.getElementById('edadTexto');
+  var edadHidden = document.getElementById('edad');
   var bloqueConsentimiento = document.getElementById('bloqueConsentimiento');
   var consentimientoInput = document.getElementById('consentimiento');
   var mensaje = document.getElementById('mensaje');
   var btnEnviar = document.getElementById('btnEnviar');
+  var hiddenIframe = document.getElementById('hidden_iframe');
   var edadCalculada = null;
+  var envioEnCurso = false;
+
+  // El formulario envía directamente a la URL de Apps Script mediante el iframe oculto,
+  // como un envío de formulario HTML clásico (evita por completo los problemas de CORS de fetch).
+  form.action = GOOGLE_SCRIPT_URL;
 
   function calcularEdad(fechaStr) {
     var hoy = new Date();
@@ -161,8 +171,9 @@
   }
 
   fechaInput.addEventListener('change', function() {
-    if (!fechaInput.value) { edadTexto.textContent = ''; bloqueConsentimiento.classList.add('hidden'); return; }
+    if (!fechaInput.value) { edadTexto.textContent = ''; edadHidden.value = ''; bloqueConsentimiento.classList.add('hidden'); return; }
     edadCalculada = calcularEdad(fechaInput.value);
+    edadHidden.value = edadCalculada;
     edadTexto.textContent = 'Edad: ' + edadCalculada + ' años';
     if (edadCalculada < 18) {
       bloqueConsentimiento.classList.remove('hidden');
@@ -174,60 +185,37 @@
     }
   });
 
-  form.addEventListener('submit', async function(e) {
-    e.preventDefault();
-
+  form.addEventListener('submit', function(e) {
     if (GOOGLE_SCRIPT_URL.indexOf('PEGA_AQUI') !== -1) {
+      e.preventDefault();
       mensaje.innerHTML = '<span class="text-red-600">Falta configurar la URL de Google Apps Script en el archivo.</span>';
       return;
     }
 
     if (edadCalculada !== null && edadCalculada < 18 && !consentimientoInput.checked) {
+      e.preventDefault();
       mensaje.innerHTML = '<span class="text-red-600">Debes confirmar el permiso de tus padres o encargado.</span>';
       return;
     }
 
+    // A partir de aquí dejamos que el navegador envíe el formulario de forma nativa al iframe oculto.
     btnEnviar.disabled = true;
     btnEnviar.textContent = 'Enviando...';
     mensaje.innerHTML = '';
+    envioEnCurso = true;
+  });
 
-    var datos = new URLSearchParams();
-    datos.append('nombre', document.getElementById('nombre').value);
-    datos.append('iglesia', document.getElementById('iglesia').value);
-    datos.append('fechaNacimiento', fechaInput.value);
-    datos.append('edad', edadCalculada !== null ? edadCalculada : '');
-    datos.append('ocupacion', document.getElementById('ocupacion').value);
-    datos.append('telefono', document.getElementById('telefono').value);
-    datos.append('sector', document.getElementById('sector').value);
-    datos.append('disponibilidad', document.getElementById('disponibilidad').value);
-    datos.append('consentimiento', consentimientoInput.checked ? 'Sí' : 'N/A');
-
-    try {
-      var resp = await fetch(GOOGLE_SCRIPT_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: datos.toString()
-      });
-
-      if (!resp.ok) {
-        throw new Error('El servidor respondió con estado ' + resp.status + '. Verifica que la URL de Apps Script sea correcta y termine en /exec, y que el despliegue tenga acceso "Cualquier usuario".');
-      }
-
-      var resultado = await resp.json().catch(function() { return null; });
-      if (resultado && resultado.result !== 'success') {
-        throw new Error(resultado.error || 'La hoja de cálculo no confirmó el registro.');
-      }
-
-      form.reset();
-      edadTexto.textContent = '';
-      bloqueConsentimiento.classList.add('hidden');
-      mensaje.innerHTML = '<span class="text-emerald-600 font-medium">¡Registro exitoso! Nos pondremos en contacto contigo pronto.</span>';
-    } catch (err) {
-      mensaje.innerHTML = '<span class="text-red-600">' + (err.message || 'Hubo un problema de conexión. Intenta de nuevo.') + '</span>';
-    } finally {
-      btnEnviar.disabled = false;
-      btnEnviar.textContent = 'Enviar registro';
-    }
+  // El iframe dispara 'load' una vez al cargar la página (vacío) y otra vez tras cada envío real.
+  hiddenIframe.addEventListener('load', function() {
+    if (!envioEnCurso) return; // ignoramos la primera carga en blanco
+    envioEnCurso = false;
+    form.reset();
+    edadTexto.textContent = '';
+    edadHidden.value = '';
+    bloqueConsentimiento.classList.add('hidden');
+    btnEnviar.disabled = false;
+    btnEnviar.textContent = 'Enviar registro';
+    mensaje.innerHTML = '<span class="text-emerald-600 font-medium">¡Registro exitoso! Nos pondremos en contacto contigo pronto.</span>';
   });
 </script>
 </body>
